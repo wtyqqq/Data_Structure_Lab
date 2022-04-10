@@ -2,7 +2,7 @@
 # -*- encoding: utf-8 -*-
 '''
 @File    :   Lab1-Josephu.py
-@Time    :   2022/01/04 16:31:48
+@Time    :   2022年4月10日10:14:49
 @Author  :   Tianyi Wang
 @Version :   1.0
 @Contact :   tianyiwang58@gmail.com
@@ -20,9 +20,6 @@ def normalSolution1(m, n):
     @description: 这个函数实现了实验报告上的顺序存储方法来解决该问题。
     This function implements the sequential storage method on the lab report to solve this problem.
     '''
-    if m <= 0 or n <= 0:
-        print("The input is invalid!")
-        return
     List = [x for x in range(1, m+1)]
     index = 0
     while len(List) > 1:
@@ -70,9 +67,6 @@ def normalSolution2(m, n):
     @description: 这个函数实现了实验报告上的循环链表方法来解决该问题。
     This function implements the loop linked list method on the lab report to solve this problem.
     '''
-    if m <= 0 or n <= 0:
-        print("The input is invalid!")
-        return
     remainNumber = m
     List = ringLinkedList(1)
     for i in range(2, m+1):
@@ -103,6 +97,9 @@ def quickSolution(m, n):
 if __name__ == '__main__':
     m = int(input())
     n = int(input())
+    if m <= 0 or n <= 0 or m < n:
+        print("The input is invalid!")
+        exit(0)
     # This is normal solution 1
     print("Normal Solution 1:")
     normalSolution1(m, n)
