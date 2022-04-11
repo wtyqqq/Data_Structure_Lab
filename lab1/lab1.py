@@ -97,7 +97,7 @@ def quickSolution(m, n):
 if __name__ == '__main__':
     m = int(input())
     n = int(input())
-    if m <= 0 or n <= 0 or m < n:
+    if m <= 0 or n <= 0:
         print("The input is invalid!")
         exit(0)
     # This is normal solution 1
