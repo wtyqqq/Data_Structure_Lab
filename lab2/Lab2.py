@@ -12,6 +12,8 @@
 3 4 -5 2  6 1  -2 0
 5 20  -7 4  3 1
 
+
+
 # 输出样例：
 15 24 -25 22 30 21 -10 20 -21 8 35 6 -33 5 14 4 -15 3 18 2 -6 1
 5 20 -4 4 -5 2 9 1 -2 0
@@ -135,12 +137,12 @@ def muls(l1, l2):
             p2 = p2.next
         p2 = l2.head
         p1 = p1.next
-
+    #处理只出现了一次的情况
     exps = []
     for item in mulRes:
         if item[1] not in exps:
             exps.append(item[1])
-
+    # 这里处理的事如果出现了两个相同的项，那么就相加
     d = {}
     for item in mulRes:
         if item[1] not in d.keys():
@@ -199,15 +201,16 @@ def solution2(a1, a2):
     # 考虑链表长度进行运算
     if len(a1) == 0 and len(a2) == 0:  # 都为0，则输出都为0
         print("The result of adding the two ploynomial is ", [0, 0])
-        # print("The result of multiplying the two ploynomial is ", [0, 0])
+        print("The result of multiplying the two ploynomial is ", [0, 0])
     elif len(a1) == 0 and len(a2) > 0:  # 一个为0，另一个为多项式
         print("The result of adding the two ploynomial is ", adds(l1,l2))
+        print("The result of multiplying the two ploynomial is ", [0,0])
     elif len(a2) == 1 and len(a1) > 1: # 一个为多项式，另一个为0
         print("The result of adding the two ploynomial is ", adds(l1,l2))
+        print("The result of multiplying the two ploynomial is ", muls(l1,l2))
     else:  # 都为多项式
         print("The result of adding the two ploynomial is ", adds(l1,l2))
-
-
+        print("The result of multiplying the two ploynomial is ", muls(l1,l2))
 def main():
     l1 = list(map(int, input("Please input the first Polynomial:").split()))
     # 将l1的系数和指数存为一个元素的列表 第一个为系数 第二个为指数
