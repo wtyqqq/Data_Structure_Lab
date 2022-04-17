@@ -46,6 +46,9 @@ def solution1Add(l1, l2):
     if counts_l2 <= len(l2) - 1:
         res.append(l2[counts_l2])
         counts_l2 += 1
+    for i in range(len(res)-1):
+        if res[i][0] == 0:
+            res.pop(i)
     return res
 
 
@@ -121,7 +124,9 @@ def adds(l1, l2):
     while p2 is not None:
         addRes.append([p2.coef, p2.exp])
         p2 = p2.next
-
+    for i in range(len(addRes)-1):
+        if addRes[i][0] == 0:
+            addRes.pop(i)
     return addRes
 
 
