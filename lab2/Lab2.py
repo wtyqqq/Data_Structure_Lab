@@ -2,15 +2,15 @@
 # -*- encoding: utf-8 -*-
 '''
 @File    :   Lab2.py
-@Time    :   2022/01/09 19:51:44
+@Time    :   2022/04/17 08:35:44
 @Author  :   Tianyi Wang
 @Version :   1.0
 @Contact :   tianyiwang58@gmail.com
 @Desc    :   一个处理多项式相加的程序。
 
 # 输入样例：
-4 3 4 -5 2  6 1  -2 0
-3 5 20  -7 4  3 1
+3 4 -5 2  6 1  -2 0
+5 20  -7 4  3 1
 
 # 输出样例：
 15 24 -25 22 30 21 -10 20 -21 8 35 6 -33 5 14 4 -15 3 18 2 -6 1
@@ -20,15 +20,63 @@
 # here put the import lib
 
 
+def solution1Add(l1, l2):
+    '''
+    将两个以列表形式存储的多项式相加
+    '''
+    res = []
+    counts_l1 = 0
+    counts_l2 = 0
+    while counts_l1 <= len(l1) - 1 and counts_l2 <= len(l2) - 1:
+        if l1[counts_l1][1] < l2[counts_l2][1]:
+            res.append(l2[counts_l2])
+            counts_l2 += 1
+        elif l1[counts_l1][1] == l2[counts_l2][1]:
+            res.append([l1[counts_l1][0] + l2[counts_l2][0], l1[counts_l1][1]])
+            counts_l1 += 1
+            counts_l2 += 1
+        else:
+            res.append(l1[counts_l1])
+            counts_l1 += 1
+    if counts_l1 <= len(l1) - 1:
+        res.append(l1[counts_l1])
+        counts_l1 += 1
+    if counts_l2 <= len(l2) - 1:
+        res.append(l2[counts_l2])
+        counts_l2 += 1
+    return res
+
+
+def ploynomialSort(l):
+    '''
+    对多项式按照降幂进行排序
+    '''
+    for i in range(len(l)):
+        for j in range(i + 1, len(l)):
+            if l[i][1] < l[j][1]:
+                l[i], l[j] = l[j], l[i]
+    return l
+
+
+def solution1(l1, l2):
+    # 这里的输入可以打乱顺序，后面做了降幂排序
+    l1 = [[l1[i], l1[i + 1]] for i in range(0, len(l1) - 1, 2)]
+    ploynomialSort(l1)
+    l2 = [[l2[i], l2[i + 1]] for i in range(0, len(l2) - 1, 2)]
+    ploynomialSort(l2)
+    #print(l1)
+    #print(l2)
+    res1 = solution1Add(l1, l2)
+    print("The result of adding the two ploynomial is ", res1)
+
+
 class Node:
     def __init__(self, coef, exp):
         self.coef = coef
         self.exp = exp
         self.next = None
-
     def get_data(self):
         return [self.coef, self.exp]
-
 
 class List:
     def __init__(self, head):
@@ -48,39 +96,31 @@ class List:
         return res
 
 
-def adds(l1, l2): 
+def adds(l1, l2):
     p1 = l1.head
     p2 = l2.head
     addRes = []
     while (p1 is not None) and (p2 is not None):
-        tmp1_exp = p1.get_data()[1]
-        tmp2_exp = p2.get_data()[1]
-        # 当指数相同时，系数相加
+        tmp1_exp = p1.exp
+        tmp2_exp = p2.exp
         if tmp1_exp == tmp2_exp:
-            addRes.append([p1.get_data()[0] + p2.get_data()[0], p1.get_data()[1]])
+            addRes.append([p1.coef + p2.coef, p1.exp])
             p1 = p1.next
             p2 = p2.next
         if tmp1_exp > tmp2_exp:
-            addRes.append([p1.get_data()[0], p1.get_data()[1]])
+            addRes.append([p1.coef, p1.exp])
             p1 = p1.next
         if tmp1_exp < tmp2_exp:
-            addRes.append([p2.get_data()[0], p2.get_data()[1]])
+            addRes.append([p2.coef, p2.exp])
             p2 = p2.next
     while p1 is not None:
-        addRes.append([p1.get_data()[0], p1.get_data()[1]])
+        addRes.append([p1.coef, p1.exp])
         p1 = p1.next
     while p2 is not None:
-        addRes.append([p2.get_data()[0], p2.get_data()[1]])
+        addRes.append([p2.coef, p2.exp])
         p2 = p2.next
 
-    res1 = []
-    for item in addRes:
-        if item[0] != 0:
-            res1.append(item[0])
-            res1.append(item[1])
-    if len(res1) == 0:
-        return [0, 0]
-    return res1
+    return addRes
 
 
 def muls(l1, l2):
@@ -120,99 +160,64 @@ def muls(l1, l2):
         return [0, 0]
     return res2
 
-
-def print_list(x):
-    for i in x[:-1]:
-        print(i, end=' ')
-    print(x[-1], end='')
-
-def solution2():
-    # 输入
-    a1 = list(map(int, input().split()))
-    a2 = list(map(int, input().split()))
-
-    # 变为链表
-    if a1[0] != 0:
-        head1 = Node(a1[1], a1[2])
-        l1 = List(head1)
-        if a1[0] > 1:
-            for i in range(a1[0] - 1):
-                node = Node(a1[i * 2 + 3], a1[i * 2 + 4])
-                l1.addNode(node)
-
-    if a2[0] != 0:
-        head2 = Node(a2[1], a2[2])
-        l2 = List(head2)
-        if a2[0] > 1:
-            for i in range(a2[0] - 1):
-                node = Node(a2[i * 2 + 3], a2[i * 2 + 4])
-                l2.addNode(node)
-    # 考虑链表长度进行运算
-    if len(a1) == 1 and len(a2) == 1:  # 都为0，则输出都为0
-        print_list([0, 0])
-        print()
-        print_list([0, 0])
-    elif len(a1) == 1 and len(a2) > 1:  # 一个为0，另一个为多项式
-        print_list([0, 0])
-        print()
-        print_list(a2[1:])
-    elif len(a2) == 1 and len(a1) > 1:
-        print_list([0, 0])
-        print()
-        print_list(a1[1:])
-    else:  # 都为多项式
-        print_list(muls(l1, l2))
-        print()
-        print_list(adds(l1, l2))
-
-def solution1Add(l1,l2):
-    '''
-    将两个以列表形式存储的多项式相加
-    '''
-    res = []
-    counts_l1 = 0
-    counts_l2 = 0
-    while counts_l1 <= len(l1)-1 and counts_l2 <= len(l2)-1:
-        if l1[counts_l1][1] < l2[counts_l2][1]:
-            res.append(l2[counts_l2])
-            counts_l2 += 1
-        elif l1[counts_l1][1]==l2[counts_l2][1]:
-            res.append([l1[counts_l1][0]+l2[counts_l2][0],l1[counts_l1][1]])
-            counts_l1 += 1
-            counts_l2 += 1
-        else:
-            res.append(l1[counts_l1])
-            counts_l1 += 1
-    if counts_l1 <= len(l1)-1:
-        res.append(l1[counts_l1])
-        counts_l1+=1
-    if counts_l2 <= len(l2)-1:
-        res.append(l2[counts_l2])
-        counts_l2+=1
-    return res
-def ploynomialSort(l):
-    '''
-    对多项式按照降幂进行排序
-    '''
+def sortInput(l):
+    l = [[l[i], l[i + 1]] for i in range(0, len(l) - 1, 2)]
     for i in range(len(l)):
-        for j in range(i+1,len(l)):
-            if l[i][1]<l[j][1]:
-                l[i],l[j] = l[j],l[i]
-    return l
+        for j in range(i + 1, len(l)):
+            if l[i][1] < l[j][1]:
+                l[i], l[j] = l[j], l[i]
+    res = []
+    for item in l:
+        res.append(item[0])
+        res.append(item[1])
+    return res
 
-def solution1():
+def solution2(a1, a2):
+    # a1 a2是两个多项式的列表
+    # 先处理一下我们的输入
+    a1 = sortInput(a1)
+    a2 = sortInput(a2)
+    #print(a1)
+    #print(a2)
+    # 变为链表
+    if len(a1) != 0:
+        head1 = Node(a1[0], a1[1])
+        l1 = List(head1)
+        if len(a1) > 2:
+            for i in range(int(len(a1)/2) - 1):
+                node = Node(a1[(i + 1)*2], a1[(i + 1) * 2 + 1])
+                l1.addNode(node)
+    #print("The first ploynomial is ", l1.printLink(l1.head))
+    if len(a2) != 0:
+        head2 = Node(a2[0], a2[1])
+        l2 = List(head2)
+        if len(a2) > 2:
+            for i in range(int(len(a2)/2) - 1):
+                node = Node(a2[(i + 1) * 2], a2[(i + 1) * 2 + 1])
+                l2.addNode(node)
+    #print("The second ploynomial is ", l2.printLink(l2.head))
+    # 考虑链表长度进行运算
+    if len(a1) == 0 and len(a2) == 0:  # 都为0，则输出都为0
+        print("The result of adding the two ploynomial is ", [0, 0])
+        # print("The result of multiplying the two ploynomial is ", [0, 0])
+    elif len(a1) == 0 and len(a2) > 0:  # 一个为0，另一个为多项式
+        print("The result of adding the two ploynomial is ", adds(l1,l2))
+    elif len(a2) == 1 and len(a1) > 1: # 一个为多项式，另一个为0
+        print("The result of adding the two ploynomial is ", adds(l1,l2))
+    else:  # 都为多项式
+        print("The result of adding the two ploynomial is ", adds(l1,l2))
+
+
+def main():
     l1 = list(map(int, input("Please input the first Polynomial:").split()))
     # 将l1的系数和指数存为一个元素的列表 第一个为系数 第二个为指数
-    # 这里的输入可以打乱顺序，后面做了降幂排序
-    l1 = [[l1[i], l1[i + 1]] for i in range(0, len(l1) - 1, 2)]
-    ploynomialSort(l1)
     l2 = list(map(int, input("Please input the second Polynomial:").split()))
-    l2 = [[l2[i], l2[i + 1]] for i in range(0, len(l2) - 1, 2)]
-    ploynomialSort(l2)
-    print(l1)
-    print(l2)
-    res1 = solution1Add(l1,l2)
-    print("The result of adding the two ploynomial is ",res1)
+    # 解法1：使用python自带的字典解决
+    print("##################solution 1######################")
+    solution1(l1, l2)
+    # 解法2：使用链表解决
+    print("##################solution 2######################")
+    solution2(l1, l2)
 
-
-solution1()
+if __name__ == '__main__':
+    main()
