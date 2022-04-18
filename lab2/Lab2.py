@@ -72,7 +72,9 @@ def solution1(l1, l2):
     #print(l1)
     #print(l2)
     res1 = solution1Add(l1, l2)
-    print("The result of adding the two ploynomial is ", res1)
+    print("The result of adding the two ploynomial is ", end="")
+    #print(res1)
+    printThePloy(res1)
 
 
 class Node:
@@ -163,9 +165,14 @@ def muls(l1, l2):
             res2.append(item[1])
             res2.append(item[0])
     # 如果最后出现空数组需要输出0 0
+    result = []
     if len(res2) == 0:
         return [0, 0]
-    return res2
+    else:
+        for i in range(len(res2)):
+            if i % 2 == 0:
+                result.append([res2[i], res2[i + 1]])
+        return result
 
 def sortInput(l):
     l = [[l[i], l[i + 1]] for i in range(0, len(l) - 1, 2)]
@@ -205,17 +212,38 @@ def solution2(a1, a2):
     #print("The second ploynomial is ", l2.printLink(l2.head))
     # 考虑链表长度进行运算
     if len(a1) == 0 and len(a2) == 0:  # 都为0，则输出都为0
-        print("The result of adding the two ploynomial is ", [0, 0])
-        print("The result of multiplying the two ploynomial is ", [0, 0])
+        print("The result of adding the two ploynomial is ", 0)
+        print("The result of multiplying the two ploynomial is ", 0)
     elif len(a1) == 0 and len(a2) > 0:  # 一个为0，另一个为多项式
-        print("The result of adding the two ploynomial is ", adds(l1,l2))
-        print("The result of multiplying the two ploynomial is ", [0,0])
+        print("The result of adding the two ploynomial is ", end="")
+        printThePloy(adds(l1, l2))
+        print("The result of multiplying the two ploynomial is ", 0)
     elif len(a2) == 1 and len(a1) > 1: # 一个为多项式，另一个为0
-        print("The result of adding the two ploynomial is ", adds(l1,l2))
-        print("The result of multiplying the two ploynomial is ", muls(l1,l2))
+        print("The result of adding the two ploynomial is ", end="")
+        printThePloy(adds(l1, l2))
+        print("The result of multiplying the two ploynomial is ", end="")
+        printThePloy(muls(l1, l2))
     else:  # 都为多项式
-        print("The result of adding the two ploynomial is ", adds(l1,l2))
-        print("The result of multiplying the two ploynomial is ", muls(l1,l2))
+        print("The result of adding the two ploynomial is ", end="")
+        printThePloy(adds(l1, l2))
+        print("The result of multiplying the two ploynomial is ", end="")
+        printThePloy(muls(l1, l2))
+
+def printThePloy(l):
+    """
+    打印多项式
+    """
+    for i in l:
+        if i[0]>0:
+            print("+", end="")
+        print(i[0], end="")
+        if i[1] != 0:
+            print("x", end="")
+            if i[1] > 1:
+                print("^", end="")
+                print(i[1], end="")
+    print("")
+
 def main():
     l1 = list(map(int, input("Please input the first Polynomial:").split()))
     # 将l1的系数和指数存为一个元素的列表 第一个为系数 第二个为指数
