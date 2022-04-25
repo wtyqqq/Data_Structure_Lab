@@ -29,6 +29,7 @@ def solution1Add(l1, l2):
     res = []
     counts_l1 = 0
     counts_l2 = 0
+    # 这里是处理两个的加法
     while counts_l1 <= len(l1) - 1 and counts_l2 <= len(l2) - 1:
         if l1[counts_l1][1] < l2[counts_l2][1]:
             res.append(l2[counts_l2])
