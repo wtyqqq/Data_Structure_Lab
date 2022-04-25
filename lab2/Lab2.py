@@ -46,7 +46,7 @@ def solution1Add(l1, l2):
     if counts_l2 <= len(l2) - 1:
         res.append(l2[counts_l2])
         counts_l2 += 1
-    for i in range(len(res)-1):
+    for i in range(len(res) - 1):
         if res[i][0] == 0:
             res.pop(i)
     return res
@@ -82,8 +82,10 @@ class Node:
         self.coef = coef
         self.exp = exp
         self.next = None
+
     def get_data(self):
         return [self.coef, self.exp]
+
 
 class List:
     def __init__(self, head):
@@ -126,7 +128,7 @@ def adds(l1, l2):
     while p2 is not None:
         addRes.append([p2.coef, p2.exp])
         p2 = p2.next
-    for i in range(len(addRes)-1):
+    for i in range(len(addRes) - 1):
         if addRes[i][0] == 0:
             addRes.pop(i)
     return addRes
@@ -136,10 +138,11 @@ def muls(l1, l2):
     p1 = l1.head
     p2 = l2.head
     mulRes = []
+    # 遍历l1和l2
     while p1 is not None:
-        tmp1 = p1.get_data()
+        tmp1 = [p1.coef, p1.exp]
         while p2 is not None:
-            tmp2 = p2.get_data()
+            tmp2 = [p2.coef, p2.exp]
             mulRes.append([tmp1[0] * tmp2[0], tmp1[1] + tmp2[1]])
             p2 = p2.next
         p2 = l2.head
@@ -174,6 +177,52 @@ def muls(l1, l2):
                 result.append([res2[i], res2[i + 1]])
         return result
 
+
+def devideTwoPloy(l1, l2):
+    '''
+    两个多项式相除
+    '''
+    p1 = l1.head
+    p2 = l2.head
+    divRes = []
+    while p1 is not None:
+        tmp1 = [p1.coef, p1.exp]
+        while p2 is not None:
+            tmp2 = [p2.coef, p2.exp]
+            divRes.append([tmp1[0] / tmp2[0], tmp1[1] - tmp2[1]])
+            p2 = p2.next
+        p2 = l2.head
+        p1 = p1.next
+    # 处理只出现了一次的情况
+    exps = []
+    for item in divRes:
+        if item[1] not in exps:
+            exps.append(item[1])
+    # 这里处理的事如果出现了两个相同的项，那么就相加
+    d = {}
+    for item in divRes:
+        if item[1] not in d.keys():
+            d[item[1]] = 0
+        d[item[1]] += item[0]
+
+    d = sorted(d.items(), key=lambda x: x[0], reverse=True)
+
+    res2 = []
+    for item in d:
+        # 如果多项式中出现抵消，即系数为0需要删除
+        if item[1] != 0:
+            res2.append(item[1])
+            res2.append(item[0])
+    # 如果最后出现空数组需要输出0 0
+    result = []
+    if len(res2) == 0:
+        return [0, 0]
+    else:
+        for i in range(len(res2)):
+            if i % 2 == 0:
+                result.append([res2[i], res2[i + 1]])
+
+
 def sortInput(l):
     l = [[l[i], l[i + 1]] for i in range(0, len(l) - 1, 2)]
     for i in range(len(l)):
@@ -185,6 +234,7 @@ def sortInput(l):
         res.append(item[0])
         res.append(item[1])
     return res
+
 
 def solution2(a1, a2):
     # a1 a2是两个多项式的列表
@@ -198,15 +248,15 @@ def solution2(a1, a2):
         head1 = Node(a1[0], a1[1])
         l1 = List(head1)
         if len(a1) > 2:
-            for i in range(int(len(a1)/2) - 1):
-                node = Node(a1[(i + 1)*2], a1[(i + 1) * 2 + 1])
+            for i in range(int(len(a1) / 2) - 1):
+                node = Node(a1[(i + 1) * 2], a1[(i + 1) * 2 + 1])
                 l1.addNode(node)
     #print("The first ploynomial is ", l1.printLink(l1.head))
     if len(a2) != 0:
         head2 = Node(a2[0], a2[1])
         l2 = List(head2)
         if len(a2) > 2:
-            for i in range(int(len(a2)/2) - 1):
+            for i in range(int(len(a2) / 2) - 1):
                 node = Node(a2[(i + 1) * 2], a2[(i + 1) * 2 + 1])
                 l2.addNode(node)
     #print("The second ploynomial is ", l2.printLink(l2.head))
@@ -218,7 +268,7 @@ def solution2(a1, a2):
         print("The result of adding the two ploynomial is ", end="")
         printThePloy(adds(l1, l2))
         print("The result of multiplying the two ploynomial is ", 0)
-    elif len(a2) == 1 and len(a1) > 1: # 一个为多项式，另一个为0
+    elif len(a2) == 1 and len(a1) > 1:  # 一个为多项式，另一个为0
         print("The result of adding the two ploynomial is ", end="")
         printThePloy(adds(l1, l2))
         print("The result of multiplying the two ploynomial is ", end="")
@@ -229,12 +279,40 @@ def solution2(a1, a2):
         print("The result of multiplying the two ploynomial is ", end="")
         printThePloy(muls(l1, l2))
 
+def ExtraSolutio1(a1,a2):
+    a1 = sortInput(a1)
+    a2 = sortInput(a2)
+    # 变为链表
+    if len(a1) != 0:
+        head1 = Node(a1[0], a1[1])
+        l1 = List(head1)
+        if len(a1) > 2:
+            for i in range(int(len(a1) / 2) - 1):
+                node = Node(a1[(i + 1) * 2], a1[(i + 1) * 2 + 1])
+                l1.addNode(node)
+    #print("The first ploynomial is ", l1.printLink(l1.head))
+    if len(a2) != 0:
+        head2 = Node(a2[0], a2[1])
+        l2 = List(head2)
+        if len(a2) > 2:
+            for i in range(int(len(a2) / 2) - 1):
+                node = Node(a2[(i + 1) * 2], a2[(i + 1) * 2 + 1])
+                l2.addNode(node)
+    #print("The second ploynomial is ", l2.printLink(l2.head))
+    # 考虑链表长度进行运算
+    if len(a2) == 0:  # 都为0，则输出都为0
+        print("the second ploynomial cannot be 0")
+    elif len(a1) == 0:
+        print("the result of deviding the two ploynomial is 0")
+    else:
+        print("the result of deviding the two ploynomial is", devideTwoPloy(l1, l2))
+
 def printThePloy(l):
     """
     打印多项式
     """
     for i in l:
-        if i[0]>0:
+        if i[0] > 0:
             print("+", end="")
         print(i[0], end="")
         if i[1] != 0:
@@ -243,6 +321,7 @@ def printThePloy(l):
                 print("^", end="")
                 print(i[1], end="")
     print("")
+
 
 def main():
     l1 = list(map(int, input("Please input the first Polynomial:").split()))
@@ -254,6 +333,9 @@ def main():
     # 解法2：使用链表解决
     print("##################solution 2######################")
     solution2(l1, l2)
+    print("###############Extra solution 1######################")
+    ExtraSolutio1(l1, l2)
+    print("###############Extra solution 2######################")
 
 if __name__ == '__main__':
     main()
