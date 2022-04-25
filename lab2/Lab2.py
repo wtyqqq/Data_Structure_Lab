@@ -311,6 +311,9 @@ def printThePloy(l):
     """
     打印多项式
     """
+    if l[0][0] == 0:
+        print("0")
+        return
     for i in l:
         if i[0] > 0:
             print("+", end="")
