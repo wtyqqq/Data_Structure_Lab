@@ -41,10 +41,11 @@ def solution1Add(l1, l2):
         else:
             res.append(l1[counts_l1])
             counts_l1 += 1
-    if counts_l1 <= len(l1) - 1:
+    # 如果l1还有剩余
+    while counts_l1 <= len(l1) - 1:
         res.append(l1[counts_l1])
         counts_l1 += 1
-    if counts_l2 <= len(l2) - 1:
+    while counts_l2 <= len(l2) - 1:
         res.append(l2[counts_l2])
         counts_l2 += 1
     for i in range(len(res) - 1):
@@ -111,6 +112,7 @@ def adds(l1, l2):
     p2 = l2.head
     addRes = []
     while (p1 is not None) and (p2 is not None):
+        # 加法
         tmp1_exp = p1.exp
         tmp2_exp = p2.exp
         if tmp1_exp == tmp2_exp:
