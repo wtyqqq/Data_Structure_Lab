@@ -9,14 +9,15 @@
 @Desc    :   None
 '''
 
+
 def InfixToPostfix(x):
     stack1 = []
     stack2 = []
-    WeightValue = {'^':4,'*': 3, '/': 3, '+': 2, '-': 2, '(': 1}
+    WeightValue = {'^': 4, '*': 3, '/': 3, '+': 2, '-': 2, '(': 1}
     for i in x:
         if i.isdigit():
             stack2.append(i)
-        elif i in ['+', '-', '*', '/','^']:
+        elif i in ['+', '-', '*', '/', '^']:
             if stack1 == [] or stack1[-1] == '(':
                 stack1.append(i)
             elif WeightValue[i] > WeightValue[stack1[-1]]:
@@ -47,9 +48,10 @@ def caculateTheResult(operator, num1, num2):
     elif operator == '/':
         return num2 / num1
     elif operator == '^':
-        return num2 ** num1
+        return num2**num1
     else:
         return None
+
 
 def caculatePostfix(x):
     result = []
@@ -62,25 +64,30 @@ def caculatePostfix(x):
             num1 = result.pop()
             num2 = result.pop()
             #print("caculate",int(num1),int(num2),i)
-            result.append(caculateTheResult(i, int(num1),int(num2)))
+            result.append(caculateTheResult(i, int(num1), int(num2)))
     return result[0]
+
 
 def caculateInfix(x):
     numberStack = []
     operatorStack = []
-    WeightValue = {')':5,'^':4,'*': 3, '/': 3, '+': 2, '-': 2, '(': 1}
+    WeightValue = {')': 5, '^': 4, '*': 3, '/': 3, '+': 2, '-': 2, '(': 1}
     for i in x:
         if i.isdigit():
             numberStack.append(i)
-        elif i in ['+', '-', '*', '/','^']:
-            if operatorStack == [] or WeightValue[i] > WeightValue[operatorStack[-1]]:
+        elif i in ['+', '-', '*', '/', '^']:
+            if operatorStack == [] or WeightValue[i] > WeightValue[
+                    operatorStack[-1]]:
                 operatorStack.append(i)
             elif WeightValue[i] <= WeightValue[operatorStack[-1]]:
-                while operatorStack != [] and WeightValue[i] <= WeightValue[operatorStack[-1]]:
+                while operatorStack != [] and WeightValue[i] <= WeightValue[
+                        operatorStack[-1]]:
                     number1 = numberStack.pop()
                     number2 = numberStack.pop()
                     operator = operatorStack.pop()
-                    numberStack.append(caculateTheResult(operator, int(number1),int(number2)))
+                    numberStack.append(
+                        caculateTheResult(operator, int(number1),
+                                          int(number2)))
                 operatorStack.append(i)
         elif i == '(':
             operatorStack.append(i)
@@ -89,13 +96,16 @@ def caculateInfix(x):
                 number1 = numberStack.pop()
                 number2 = numberStack.pop()
                 operator = operatorStack.pop()
-                numberStack.append(str(caculateTheResult(operator, int(number1),int(number2))))
+                numberStack.append(
+                    str(caculateTheResult(operator, int(number1),
+                                          int(number2))))
             operatorStack.pop()
     while operatorStack != []:
-            number1 = numberStack.pop()
-            number2 = numberStack.pop()
-            operator = operatorStack.pop()
-            numberStack.append(str(caculateTheResult(operator, int(number1),int(number2))))
+        number1 = numberStack.pop()
+        number2 = numberStack.pop()
+        operator = operatorStack.pop()
+        numberStack.append(
+            str(caculateTheResult(operator, int(number1), int(number2))))
     return numberStack[0]
 
 
