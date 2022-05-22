@@ -23,88 +23,19 @@ class TreeNode():
         self.left = None
         self.right = None
 
-
-class Tree():
-    def __init__(self, root):
-        """Create a tree with a given root node.
-
-        Args:
-            root (TreeNode): the root node of the tree.
-        """
-        self.root = root
-
-    def insert(self, node, val):
-        """Insert a new node with a given value to the tree.
-
-        Args:
-            node (TreeNode): the node to insert.
-            val (int): the value of the node.
-        """
-        if node.val > val:
-            if node.left is None:
-                node.left = TreeNode(val)
-            else:
-                self.insert(node.left, val)
-        else:
-            if node.right is None:
-                node.right = TreeNode(val)
-            else:
-                self.insert(node.right, val)
-
-    def print_tree(self, node):
-        """Print the tree in a level order traversal.
-
-        Args:
-            node (TreeNode): the root node of the tree.
-        """
-        if node is None:
-            return
-        queue = [node]
-        while len(queue) > 0:
-            node = queue.pop(0)
-            print(node.val, end=' ')
-            if node.left is not None:
-                queue.append(node.left)
-            if node.right is not None:
-                queue.append(node.right)
-        print()
-
-    def search(self, node, val):
-        """Search for a node with a given value.
-
-        Args:
-            node (TreeNode): the root node of the tree.
-            val (int): the value of the node.
-        """
-        if node is None:
-            return False
-        if node.val == val:
-            return True
-        if node.val > val:
-            return self.search(node.left, val)
-        else:
-            return self.search(node.right, val)
-
-    def delete(self, node, val):
-        """Delete a node with a given value.
-
-        Args:
-            node (TreeNode): the root node of the tree.
-            val (int): the value of the node.
-        """
-        if node is None:
-            return
-        if node.val == val:
-            if node.left is None:
-                node = node.right
-            elif node.right is None:
-                node = node.left
-            else:
-                node.val = self.find_min(node.right)
-        elif node.val > val:
-            self.delete(node.left, val)
-        else:
-            self.delete(node.right, val)
+def creat_tree(root):
+  if len(vals)==0:
+    return root
+  if vals[0]!='#':
+    root = TreeNode(vals[0])
+    vals.pop(0)
+    root.lchild = creat_tree(root.lchild)
+    root.rchild = creat_tree(root.rchild)
+    return root
+  else:
+    root=None
+    vals.pop(0)
+    return root
 
 
 def preOrder_recursion(root):
@@ -169,3 +100,52 @@ def inOrderNotRecursion(root):
             root = stack.pop()
             print(root.val, end=' ')
             root = root.right
+
+def postOrder_recursion(root):
+    """postOrder traversal of the tree using recursion.
+
+    Args:
+        root (TreeNode): the root node of the tree.
+    """
+    if root is None:
+        return
+    postOrder_recursion(root.left)
+    postOrder_recursion(root.right)
+    print(root.val, end=' ')
+
+def postOrderNotRecursion(root):
+    """postOrder traversal of the tree without recursion.
+
+    Args:
+        root (TreeNode): the root node of the tree.
+    """
+    if root is None:
+        return
+    stack = [root]
+    while len(stack) > 0:
+        node = stack.pop()
+        if node.left is not None:
+            stack.append(node.left)
+        if node.right is not None:
+            stack.append(node.right)
+        print(node.val, end=' ')
+
+def levelOrder(root):
+    """levelOrder traversal of the tree using recursion.
+
+    Args:
+        root (TreeNode): the root node of the tree.
+    """
+    if root is None:
+        return
+    queue = [root]
+    while len(queue) > 0:
+        node = queue.pop(0)
+        print(node.val, end=' ')
+        if node.left is not None:
+            queue.append(node.left)
+        if node.right is not None:
+            queue.append(node.right)
+
+if __name__ == '__main__':
+    vals= []
