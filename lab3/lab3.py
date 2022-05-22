@@ -81,10 +81,10 @@ def caculatePostfix(x):
     """
     result = [] # result for the result of postfix expression
     post = x
-    for i in post:
-        if i.isdigit():
-            result.append(i)
-            #print(i,"is a number")
+    for i in post: # for each element in postfix expression
+        if i.isdigit():# if the element is a number
+            result.append(i) # push the number to result
+            #print(i,"is a number") 
         else:
             num1 = result.pop()
             num2 = result.pop()
@@ -104,48 +104,49 @@ def caculateInfix(x):
     """
     numberStack = []
     operatorStack = []
-    WeightValue = {')': 5, '^': 4, '*': 3, '/': 3, '+': 2, '-': 2, '(': 1}
-    for i in x:
-        if i.isdigit():
-            numberStack.append(i)
-        elif i in ['+', '-', '*', '/', '^']:
+    WeightValue = {')': 5, '^': 4, '*': 3, '/': 3, '+': 2, '-': 2, '(': 1}# operator weight
+    for i in x: 
+        if i.isdigit(): # if the element is a number
+            numberStack.append(i) # push the number to numberStack
+        elif i in ['+', '-', '*', '/', '^']: # if the element is an operator
             if operatorStack == [] or WeightValue[i] > WeightValue[
-                    operatorStack[-1]]:
+                    operatorStack[-1]]:# if operatorStack is empty or the weight of the operator is greater than the last element in operatorStack
                 operatorStack.append(i)
-            elif WeightValue[i] <= WeightValue[operatorStack[-1]]:
+            elif WeightValue[i] <= WeightValue[operatorStack[-1]]:# if the weight of the operator is less than or equal to the last element in operatorStack
                 while operatorStack != [] and WeightValue[i] <= WeightValue[
-                        operatorStack[-1]]:
-                    number1 = numberStack.pop()
-                    number2 = numberStack.pop()
-                    operator = operatorStack.pop()
+                        operatorStack[-1]]:# if the weight of the operator is less than or equal to the last element in operatorStack
+                    number1 = numberStack.pop()# pop the last element in numberStack
+                    number2 = numberStack.pop()# pop the last element in numberStack
+                    operator = operatorStack.pop()# pop the last element in operatorStack
                     numberStack.append(
                         caculateTheResult(operator, float(number1),
-                                          float(number2)))
-                operatorStack.append(i)
+                                          float(number2)))# push the result of caculate to numberStack
+                operatorStack.append(i)# push the operator to operatorStack
         elif i == '(':
-            operatorStack.append(i)
+            operatorStack.append(i)# push the element to operatorStack
         elif i == ')':
-            while operatorStack[-1] != '(':
-                number1 = numberStack.pop()
-                number2 = numberStack.pop()
-                operator = operatorStack.pop()
+            while operatorStack[-1] != '(':# if the last element in operatorStack is not '('
+                number1 = numberStack.pop()# pop the last element in numberStack
+                number2 = numberStack.pop()# pop the last element in numberStack
+                operator = operatorStack.pop()# pop the last element in operatorStack
                 numberStack.append(
                     str(caculateTheResult(operator, float(number1),
-                                          float(number2))))
-            operatorStack.pop()
-    while operatorStack != []:
-        number1 = numberStack.pop()
-        number2 = numberStack.pop()
-        operator = operatorStack.pop()
+                                          float(number2))))# push the result of caculate to numberStack
+            operatorStack.pop()# pop the last element in operatorStack
+    while operatorStack != []: # if operatorStack is not empty
+        number1 = numberStack.pop()# pop the last element in numberStack
+        number2 = numberStack.pop()# pop the last element in numberStack
+        operator = operatorStack.pop()# pop the last element in operatorStack
         #print(caculateTheResult(operator, int(number1), int(number2)))
         numberStack.append(
-            str(caculateTheResult(operator, float(number1), float(number2))))
-        
+            str(caculateTheResult(operator, float(number1), float(number2))))# push the result of caculate to numberStack
     return numberStack[0]
 
 
 if __name__ == '__main__':
     x = input("Please input the infix expression:(' ' between two numbers):")
     processedInput = x.split(' ')
+    print("Sovle using postfix expression:")
     print(caculatePostfix(InfixToPostfix(processedInput)))
+    print("Sovle using infix expression:")
     print(caculateInfix(processedInput))
