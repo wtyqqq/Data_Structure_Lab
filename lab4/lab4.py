@@ -13,32 +13,37 @@
 
 
 class TreeNode():
-    def __init__(self, x):
+    """the node of binary tree"""
+    def __init__(self, value, left=None, right=None):
         """Create a tree node with a given value.
 
         Args:
             x : the value of the node.
         """
-        self.val = x
-        self.left = None
-        self.right = None
-
-def creat_tree(root):
-  if len(vals)==0:
-    return root
-  if vals[0]!='#':
-    root = TreeNode(vals[0])
-    vals.pop(0)
-    root.lchild = creat_tree(root.lchild)
-    root.rchild = creat_tree(root.rchild)
-    return root
-  else:
-    root=None
-    vals.pop(0)
-    return root
+        self.val = value
+        self.left = left
+        self.right = right
 
 
-def preOrder_recursion(root):
+class binaryTree():
+    def __init__(self,preOrder):
+        self.pre = preOrder
+        self.prept = 0
+        self.root = self.buildTree()
+
+
+    def buildTree(self): # 建立二叉树
+        if self.prept >= len(self.pre):
+            return None
+        node = None
+        if self.pre[self.prept] != '#': # 递归建树，建立左右节点后再传回
+            node =TreeNode(self.pre[self.prept], self.buildTree(), self.buildTree())
+        self.prept += 1 
+        return node
+
+
+
+def preOrderRecursion(root):
     """preOrder traversal of the tree using recursion.
 
     Args:
@@ -48,8 +53,8 @@ def preOrder_recursion(root):
     if root is None:
         return
     print(root.val, end=' ')
-    preOrder_recursion(root.left)
-    preOrder_recursion(root.right)
+    preOrderRecursion(root.left)
+    preOrderRecursion(root.right)
 
 
 def preOrderNotRecursion(root):
@@ -70,7 +75,7 @@ def preOrderNotRecursion(root):
             stack.append(node.left)
 
 
-def inOrder_recursion(root):
+def inOrderRecursion(root):
     """inOrder traversal of the tree using recursion.
 
     Args:
@@ -78,9 +83,9 @@ def inOrder_recursion(root):
     """
     if root is None:
         return
-    inOrder_recursion(root.left)
+    inOrderRecursion(root.left)
     print(root.val, end=' ')
-    inOrder_recursion(root.right)
+    inOrderRecursion(root.right)
 
 
 def inOrderNotRecursion(root):
@@ -101,7 +106,8 @@ def inOrderNotRecursion(root):
             print(root.val, end=' ')
             root = root.right
 
-def postOrder_recursion(root):
+
+def postOrderRecursion(root):
     """postOrder traversal of the tree using recursion.
 
     Args:
@@ -109,9 +115,10 @@ def postOrder_recursion(root):
     """
     if root is None:
         return
-    postOrder_recursion(root.left)
-    postOrder_recursion(root.right)
+    postOrderRecursion(root.left)
+    postOrderRecursion(root.right)
     print(root.val, end=' ')
+
 
 def postOrderNotRecursion(root):
     """postOrder traversal of the tree without recursion.
@@ -130,6 +137,7 @@ def postOrderNotRecursion(root):
             stack.append(node.right)
         print(node.val, end=' ')
 
+
 def levelOrder(root):
     """levelOrder traversal of the tree using recursion.
 
@@ -147,5 +155,8 @@ def levelOrder(root):
         if node.right is not None:
             queue.append(node.right)
 
+
 if __name__ == '__main__':
-    vals= []
+    pre = [3,7,2,4,6,8,1]
+    tree = binaryTree(pre)
+    print(tree.root.val)
