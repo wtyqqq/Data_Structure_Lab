@@ -13,29 +13,46 @@
 
 
 class TreeNode():
-    def __init__(self, x):
+    def __init__(self, x, left=None, right=None):
         """Create a tree node with a given value.
 
         Args:
             x : the value of the node.
         """
         self.val = x
-        self.left = None
-        self.right = None
+        self.left = left
+        self.right = right
 
-def creat_tree(root):
-  if len(vals)==0:
-    return root
-  if vals[0]!='#':
-    root = TreeNode(vals[0])
-    vals.pop(0)
-    root.lchild = creat_tree(root.lchild)
-    root.rchild = creat_tree(root.rchild)
-    return root
-  else:
-    root=None
-    vals.pop(0)
-    return root
+class Tree:
+    def __init__(self):
+        self.root = None  # 初始化时根节点为None
+        self.queue = [] 
+    def add(self,item):
+        """Add a node to the tree.
+        
+        Args:
+            item : the value of the node.
+        """
+        node = TreeNode(item)
+        if self.root is None:# if the tree is empty, the root is the new node
+            self.root = node
+            return 
+        queue = [self.root]
+        while queue:
+            cur_node = queue.pop(0)
+            if cur_node.left is None:
+                # if the left child is empty, add the new node to the left child
+                cur_node.left = node
+                return
+            else:
+                # if the left child is not empty, add the new node to the right child
+                queue.append(cur_node.left)
+            
+            if cur_node.right is None:
+                cur_node.right = node
+                return
+            else:
+                queue.append(cur_node.right)
 
 
 def preOrder_recursion(root):
@@ -148,4 +165,22 @@ def levelOrder(root):
             queue.append(node.right)
 
 if __name__ == '__main__':
-    vals= []
+    pre = [5,3,7,2,4,6,8,1]
+    tree = Tree()
+    tree.root = TreeNode(pre[0])
+    for i in range(1, len(pre)):
+        tree.add(pre[i])
+    print('preOrder traversal of the tree using recursion:')
+    preOrder_recursion(tree.root)
+    print('\npreOrder traversal of the tree without recursion:')
+    preOrderNotRecursion(tree.root)
+    print('\ninOrder traversal of the tree using recursion:')
+    inOrder_recursion(tree.root)
+    print('\ninOrder traversal of the tree without recursion:')
+    inOrderNotRecursion(tree.root)
+    print('\npostOrder traversal of the tree using recursion:')
+    postOrder_recursion(tree.root)
+    print('\npostOrder traversal of the tree without recursion:')
+    postOrderNotRecursion(tree.root)
+    print('\nlevelOrder traversal of the tree using recursion:')
+    levelOrder(tree.root)

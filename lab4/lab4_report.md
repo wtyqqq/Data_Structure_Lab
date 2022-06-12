@@ -16,11 +16,40 @@
 
 二叉树序列 ：
 
-**3,7,2,4,6,8,1**
+**5,3,7,2,4,6,8,1**
 
 二叉树图片:
 
 ![image-20220522092159080](lab4_report.assets/image-20220522092159080.png)
+
+测试代码
+
+```python
+if __name__ == '__main__':
+    pre = [5,3,7,2,4,6,8,1]
+    tree = Tree()
+    tree.root = TreeNode(pre[0])
+    for i in range(1, len(pre)):
+        tree.add(pre[i])
+    print('preOrder traversal of the tree using recursion:')
+    preOrder_recursion(tree.root)
+    print('\npreOrder traversal of the tree without recursion:')
+    preOrderNotRecursion(tree.root)
+    print('\ninOrder traversal of the tree using recursion:')
+    inOrder_recursion(tree.root)
+    print('\ninOrder traversal of the tree without recursion:')
+    inOrderNotRecursion(tree.root)
+    print('\npostOrder traversal of the tree using recursion:')
+    postOrder_recursion(tree.root)
+    print('\npostOrder traversal of the tree without recursion:')
+    postOrderNotRecursion(tree.root)
+    print('\nlevelOrder traversal of the tree using recursion:')
+    levelOrder(tree.root)
+```
+
+测试结果
+
+![image-20220608092946958](lab4_report.assets/image-20220608092946958.png)
 
 ## 算法思路
 
@@ -43,7 +72,42 @@ class TreeNode():
 
 ### 二叉树的构建
 
-对于二叉树的构建，我
+对于二叉树的构建，我构建了一个Tree类，使用add函数添加。
+
+```python
+class Tree:
+    def __init__(self):
+        self.root = None  # 初始化时根节点为None
+        self.queue = [] 
+    def add(self,item):
+        """Add a node to the tree.
+        
+        Args:
+            item : the value of the node.
+        """
+        node = TreeNode(item)
+        if self.root is None:# if the tree is empty, the root is the new node
+            self.root = node
+            return 
+        queue = [self.root]
+        while queue:
+            cur_node = queue.pop(0)
+            if cur_node.left is None:
+                # if the left child is empty, add the new node to the left child
+                cur_node.left = node
+                return
+            else:
+                # if the left child is not empty, add the new node to the right child
+                queue.append(cur_node.left)
+            
+            if cur_node.right is None:
+                cur_node.right = node
+                return
+            else:
+                queue.append(cur_node.right)
+```
+
+
 
 ### 先序遍历
 
