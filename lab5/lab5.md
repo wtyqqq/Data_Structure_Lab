@@ -83,14 +83,17 @@ def checkLinktable(self):
 ### 深度遍历
 
 ```python
-def dfs(self,visited = None,i=None):
-        if visited == None:
+    def dfs(self,visited = None,i=None):# 深度遍历
+        if visited == None:# 初始化
             visited=[False]*len(self.linktable)    
-        visited[i-1]=True
-        for j in range(2,len(self.linktable[i-1])):
-            if visited[int(self.linktable[i-1][j])-1]==False:
-                visited[int(self.linktable[i-1][j])-1]=True
-                self.dfs(visited,int(self.linktable[i-1][j]))
+            print(i,end=" ")
+        visited[i-1]=True # 访问点i
+        
+        for j in range(2,len(self.linktable[i-1])):# 对i的每一个邻接点进行深度遍历
+            if visited[int(self.linktable[i-1][j])-1]==False:# 如果邻接点没有被访问过
+                visited[int(self.linktable[i-1][j])-1]=True# 设置邻接点为已访问
+                print(int(self.linktable[i-1][j]),end=" ")
+                self.dfs(visited,int(self.linktable[i-1][j]))# 递归调用dfs函数
 ```
 
 对于图的深度遍历，我使用了递归实现。

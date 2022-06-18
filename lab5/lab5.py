@@ -22,7 +22,7 @@ class graph():
         else:
             print("The link table is not correct! Please check!")
     
-    def checkLinktable(self):
+    def checkLinktable(self):# 检查链接表是否正确
         if len(self.linktable)!=self.node:
             print("The number of nodes is not correct!")
             return False
@@ -34,26 +34,29 @@ class graph():
             return False
         return True
 
-    def dfs(self,visited = None,i=None):
-        if visited == None:
+    def dfs(self,visited = None,i=None):# 深度遍历
+        if visited == None:# 初始化
             visited=[False]*len(self.linktable)    
-        visited[i-1]=True
-        for j in range(2,len(self.linktable[i-1])):
-            if visited[int(self.linktable[i-1][j])-1]==False:
-                visited[int(self.linktable[i-1][j])-1]=True
-                self.dfs(visited,int(self.linktable[i-1][j]))
+            print(i,end=" ")
+        visited[i-1]=True # 访问点i
+        
+        for j in range(2,len(self.linktable[i-1])):# 对i的每一个邻接点进行深度遍历
+            if visited[int(self.linktable[i-1][j])-1]==False:# 如果邻接点没有被访问过
+                visited[int(self.linktable[i-1][j])-1]=True# 设置邻接点为已访问
+                print(int(self.linktable[i-1][j]),end=" ")
+                self.dfs(visited,int(self.linktable[i-1][j]))# 递归调用dfs函数
 
-    def bfs(self,i):
-        myqueue=[]
+    def bfs(self,i): # 广度遍历
+        myqueue=[]# 初始化队列
         myqueue.append(i)
         visited=[False]*len(self.linktable)
         visited[i-1]=True
-        while len(myqueue)>0:
+        while len(myqueue)>0:# 当队列不为空时
             i=myqueue.pop(0)
             print(i,end=" ")
-            for j in range(2,len(self.linktable[i-1])):
-                if visited[int(self.linktable[i-1][j])-1]==False:
-                    myqueue.append(int(self.linktable[i-1][j]))
+            for j in range(2,len(self.linktable[i-1])):# 对i的每一个邻接点进行广度遍历
+                if visited[int(self.linktable[i-1][j])-1]==False:# 如果邻接点没有被访问过
+                    myqueue.append(int(self.linktable[i-1][j]))# 将邻接点加入队列
                     #print(int(linktable[i-1][j]))
                     visited[int(self.linktable[i-1][j])-1]=True
 
